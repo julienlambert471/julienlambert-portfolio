@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio – Julien Lambert</title>
+  <style>
+    /* ====== Design system ====== */
+    :root{
+      --bg-1:#0b1220;     /* bleu nuit */
+      --bg-2:#0e1b2e;     /* bleu ardoise */
+      --accent:#60a5fa;   /* bleu clair */
+      --accent-2:#22d3ee; /* cyan */
+      --text:#eef2ff;     /* blanc doux */
+      --muted:#cbd5e1;    /* gris clair */
+      --card: rgba(255,255,255,0.08);
+      --card-brd: rgba(255,255,255,0.18);
+      --btn:#007BFF;
+      --btn-h:#113cfa;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius:16px;
+    }
+
+    /* ====== Reset ====== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    img{display:block;max-width:100%}
+    a{color:inherit}
+
+    /* ====== Global background (dégradés + grille) ====== */
+    body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at -10% -20%, rgba(96,165,250,0.25), transparent 60%),
+        radial-gradient(700px 500px at 110% 0%, rgba(34,211,238,0.20), transparent 60%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      min-height:100dvh;
+    }
+    /* grille légère par-dessus le fond */
+    body::after{
+      content:"";
+      position:fixed; inset:0; pointer-events:none; z-index:-1;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1.3px);
+      background-size: 22px 22px;
+      mix-blend-mode: overlay;
+    }
+
+    /* ====== Hero ====== */
+    .hero{
+      position:relative; text-align:center; padding:90px 20px 60px;
+      overflow:hidden;
+    }
+    .hero h1{font-size:clamp(2rem,6vw,3.2rem); font-weight:800; letter-spacing:0.3px;}
+    .hero p{margin-top:10px; color:var(--muted); font-size:clamp(1rem,2.5vw,1.2rem);}
+    /* blobs lumineux animés derrière le titre */
+    .blob{position:absolute; border-radius:999px; filter: blur(60px); opacity:.55; animation: float 18s ease-in-out infinite;}
+    .b1{width:420px; height:420px; background:#2563eb; top:-120px; left:-120px;}
+    .b2{width:360px; height:360px; background:#06b6d4; right:-90px; top:10px; animation-delay: -6s;}
+    .b3{width:300px; height:300px; background:#a78bfa; bottom:-120px; left:15%; animation-delay: -12s;}
+    @keyframes float{
+      0%,100%{transform:translateY(0) translateX(0)}
+      50%{transform:translateY(25px) translateX(15px)}
+    }
+    /* vague décorative en bas du hero */
+    .wave{display:block; width:100%; height:70px; margin-top:40px; opacity:.35}
+
+    /* ====== Nav ====== */
+    .nav{position:sticky; top:0; z-index:10; backdrop-filter: blur(8px);
+      background: rgba(10,15,25,0.35); border-bottom:1px solid var(--card-brd);}
+    .nav .wrap{max-width:1100px; margin:auto; display:flex; gap:16px; padding:12px 20px; justify-content:center; flex-wrap:wrap}
+    .nav a{padding:8px 12px; border-radius:10px; text-decoration:none; color:var(--text); opacity:.9}
+    .nav a:hover{background:rgba(255,255,255,0.08); opacity:1}
+
+    /* ====== Sections ====== */
+    section{max-width:1100px; margin:50px auto; padding:0 20px}
+    h2{font-size:clamp(1.6rem,4vw,2rem); text-align:center; margin-bottom:26px}
+    .sub{ text-align:center; color:var(--muted); margin:-14px 0 26px}
+
+    /* ====== Cards ====== */
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px}
+    .card{background:var(--card); border:1px solid var(--card-brd); border-radius:var(--radius); padding:22px; box-shadow: var(--shadow)}
+    .card h3{font-size:1.25rem; margin-bottom:6px}
+    .card p{color:var(--muted)}
+    .price{font-weight:800; margin:12px 0 16px; font-size:1.15rem; color:#fff}
+    .btn{display:inline-block; background:var(--btn); color:#000; font-weight:700; padding:12px 18px; border-radius:12px; text-decoration:none; transition:.25s}
+    .btn:hover{background:var(--btn-h); transform: translateY(-1px)}
+
+    /* ====== Portfolio thumbs (sans images externes) ====== */
+    .thumb{
+      height:160px; border-radius:14px; margin-bottom:14px;
+      background:
+        radial-gradient(80% 80% at 10% 10%, rgba(255,255,255,.18), transparent 40%),
+        radial-gradient(70% 70% at 100% 0%, rgba(34,211,238,.25), transparent 45%),
+        linear-gradient(135deg, rgba(96,165,250,.35), rgba(167,139,250,.35));
+      border:1px solid var(--card-brd);
+      position:relative; overflow:hidden;
+    }
+    .thumb::after{
+      /* motif diagonales léger */
+      content:""; position:absolute; inset:0; opacity:.15;
+      background-image: repeating-linear-gradient(45deg, #fff 0 2px, transparent 2px 10px);
+    }
+    .emoji{
+      position:absolute; inset:auto auto 12px 12px; font-size:28px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.4));
+    }
+
+    /* ====== FAQ ====== */
+    .faq .q{background:var(--card); border:1px solid var(--card-brd); border-radius:14px; padding:18px 20px}
+    .faq .q h3{margin-bottom:6px}
+    .faq .q p{color:var(--muted)}
+
+    /* ====== Contact & Footer ====== */
+    .contact{ text-align:center}
+    .contact a.mail{color:var(--btn); text-decoration:none}
+    footer{margin-top:60px; padding:24px; text-align:center; color:var(--muted); border-top:1px solid var(--card-brd); background:rgba(0,0,0,0.25)}
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <h1>Julien Lambert</h1>
+    <p>Je conçois des sites modernes, rapides et adaptés à vos besoins.</p>
+    <svg class="wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="white" d="M0,96L80,85.3C160,75,320,53,480,69.3C640,85,800,139,960,149.3C1120,160,1280,128,1360,112L1440,96L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z" />
+    </svg>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <h2>💼 Mes services</h2>
+    <p class="sub">Merci de me contacter avant paiement pour définir vos besoins.</p>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb"><span class="emoji">🌐</span></div>
+        <h3>Site vitrine</h3>
+        <p>Un site élégant pour présenter votre activité, vos horaires et vos contacts.</p>
+        <div class="price">300 €</div>
+        <a class="btn" target="_blank" href="https://www.paypal.com/ncp/payment/B9LZ2QFAMZWA4">Payer maintenant</a>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><span class="emoji">🛒</span></div>
+        <h3>Site e-commerce</h3>
+        <p>Boutique en ligne avec gestion des produits et paiement sécurisé.</p>
+        <div class="price">500 €</div>
+        <a class="btn" target="_blank" href="https://www.paypal.com/ncp/payment/E53Z3X8U6LC3Y">Payer maintenant</a>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><span class="emoji">⚡</span></div>
+        <h3>Site sur mesure</h3>
+        <p>Fonctionnalités personnalisées et design unique selon votre projet.</p>
+        <div class="price">800 €</div>
+        <a class="btn" target="_blank" href="https://www.paypal.com/ncp/payment/8QWJC76BYLNKN">Payer maintenant</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <h2>📁 Portfolio</h2>
+    <p class="sub">Exemples fictifs pour présenter mon style et mes compétences.</p>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb"><span class="emoji">🍝</span></div>
+        <h3>Site vitrine – Restaurant italien</h3>
+        <p>Menu en ligne, galerie photos et formulaire de réservation.</p>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><span class="emoji">👕</span></div>
+        <h3>E-commerce – Boutique de vêtements</h3>
+        <p>Catalogue produits, panier et paiement sécurisé.</p>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><span class="emoji">🏡</span></div>
+        <h3>Sur mesure – Agence immobilière</h3>
+        <p>Fiches de biens, recherche et contact rapide.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- FAQ (réintégrée et enrichie) -->
+  <section id="faq">
+    <h2>❓ FAQ</h2>
+    <div class="grid faq">
+      <div class="q">
+        <h3>Comment puis-je payer ?</h3>
+        <p>Directement par PayPal via les boutons “Payer maintenant” de la section Services (carte bancaire ou compte PayPal).</p>
+      </div>
+      <div class="q">
+        <h3>Dois-je vous contacter avant de payer ?</h3>
+        <p>Oui, un court échange permet de confirmer vos besoins (pages, contenu, fonctionnalités) pour éviter tout malentendu.</p>
+      </div>
+      <div class="q">
+        <h3>Délais de livraison</h3>
+        <p>Vitrine : 1 à 2 semaines. E-commerce / sur mesure : selon complexité. Un planning est fourni au départ.</p>
+      </div>
+      <div class="q">
+        <h3>Le site est-il responsive ?</h3>
+        <p>Oui, tous les sites sont optimisés pour mobile, tablette et ordinateur.</p>
+      </div>
+      <div class="q">
+        <h3>Hébergement & nom de domaine</h3>
+        <p>Je peux vous conseiller et vous accompagner. Comptez ~10 €/an pour le domaine et ~5 €/mois pour l’hébergement.</p>
+      </div>
+      <div class="q">
+        <h3>Révisions incluses</h3>
+        <p>Deux séries de retours sont incluses pour finaliser le site (textes, couleurs, images). Au-delà, devis complémentaire.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <h2>📬 Contact</h2>
+    <p>Parlez-moi de votre projet et obtenez un plan rapide.</p>
+    <p style="margin-top:8px">Email : <a class="mail" href="mailto:julien.lambert.pro@example.com">julien.lambert.pro@example.com</a></p>
+  </section>
+
+  <footer>
+    <p>© 2025 Julien Lambert — Sites vitrines · E-commerce · Sur mesure</p>
+  </footer>
+</body>
+</html>
+
+
+
+
+
